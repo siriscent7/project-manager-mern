@@ -5,9 +5,16 @@ require('dotenv').config();
 
 const app = express();
 
+// ✅ ADD YOUR VERCEL URL HERE
+const FRONTEND_URL = 'https://project-manager-mern-alpha.vercel.app';
+
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5001'],
+  origin: [
+    'http://localhost:3000',           // Local dev
+    'http://localhost:5001',           // Local backend
+    FRONTEND_URL                        // Production frontend
+  ],
   credentials: true
 }));
 app.use(express.json());
