@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as api from '../../services/api';
 
@@ -12,11 +12,8 @@ const BoardCanvas = () => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [cardComment, setCardComment] = useState('');
 
-  useEffect(() => {
-    fetchBoard();
-  }, [boardId]);
-
-  const fetchBoard = async () => {
+  // ✅ Wrap fetchBoard in useCallback with boardId as dependency
+  const fetchBoard = useCallback(async () => {
     try {
       const response = await api.getBoard(boardId);
       setBoard(response.data.board);
@@ -26,7 +23,12 @@ const BoardCanvas = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [boardId]);
+
+  // ✅ Now fetchBoard is included in the dependency array
+  useEffect(() => {
+    fetchBoard();
+  }, [fetchBoard, boardId]);
 
   const handleCreateList = async (e) => {
     e.preventDefault();

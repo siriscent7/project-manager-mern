@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as api from '../../services/api';
 
@@ -10,11 +10,8 @@ const ProjectDetail = () => {
   const [newBoardName, setNewBoardName] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchProject();
-  }, [projectId]);
-
-  const fetchProject = async () => {
+  // ✅ Wrap fetchProject in useCallback with projectId as dependency
+  const fetchProject = useCallback(async () => {
     try {
       const response = await api.getProject(projectId);
       setProject(response.data.project);
@@ -23,7 +20,12 @@ const ProjectDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [projectId]);
+
+  // ✅ Now fetchProject is included in the dependency array
+  useEffect(() => {
+    fetchProject();
+  }, [fetchProject, projectId]);
 
   const handleCreateBoard = async (e) => {
     e.preventDefault();
