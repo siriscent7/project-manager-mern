@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://project-manager-backend-97b0.onrender.com'
+  baseURL: 'https://project-manager-backend-97b0.onrender.com/api'
 });
 
 // Add token to all requests
